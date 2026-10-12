@@ -57,13 +57,18 @@ func _make_world() -> void:
     _make_box(self, Vector3(-4, 1.5, 6), Vector3(4, 3, 0.5), Color(0.38, 0.39, 0.43))
     _make_box(self, Vector3(4, 1.5, 6), Vector3(4, 3, 0.5), Color(0.38, 0.39, 0.43))
     _make_box(self, Vector3(0, -0.25, 12), Vector3(4, 0.5, 12), Color(0.28, 0.29, 0.32))
+    _make_box(self, Vector3(0, -0.25, 24), Vector3(4, 0.5, 12), Color(0.28, 0.29, 0.32))
+    _make_box(self, Vector3(-2, 1.5, 24), Vector3(0.5, 3, 12), Color(0.38, 0.39, 0.43))
+    _make_box(self, Vector3(2, 1.5, 24), Vector3(0.5, 3, 12), Color(0.38, 0.39, 0.43))
+    _make_box(self, Vector3(0, 1.5, 30), Vector3(4, 3, 0.5), Color(0.38, 0.39, 0.43))
+    _make_box(self, Vector3(0, 3.05, 18), Vector3(4.5, 0.3, 24), Color(0.25, 0.26, 0.30))
     _make_box(self, Vector3(-2, 1.5, 12), Vector3(0.5, 3, 12), Color(0.38, 0.39, 0.43))
     _make_box(self, Vector3(2, 1.5, 12), Vector3(0.5, 3, 12), Color(0.38, 0.39, 0.43))
 
 func _make_player() -> void:
     player = CharacterBody3D.new()
     player.name = "Player"
-    player.position = Vector3(0, 1, 0)
+    player.position = Vector3(0, 1.2, 0)
     add_child(player)
     var capsule := CapsuleShape3D.new()
     capsule.radius = 0.35
@@ -85,7 +90,7 @@ func _make_camera() -> void:
     camera_pivot = Node3D.new()
     add_child(camera_pivot)
     var camera := Camera3D.new()
-    camera.position = Vector3(0, 3.5, 6.5)
+    camera.position = Vector3(0, 3.5, -6.5)
     camera.rotation_degrees.x = -18
     camera.current = true
     camera_pivot.add_child(camera)

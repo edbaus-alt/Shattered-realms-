@@ -1,0 +1,42 @@
+name: Godot dungeon preview checks
+
+on:
+  pull_request:
+    paths:
+      - "scripts/**"
+      - "scenes/**"
+      - "tests/**"
+      - "project.godot"
+      - ".github/workflows/dungeon-preview-checks.yml"
+  push:
+    branches:
+      - main
+      - feature/modular-3d-preview-v08
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  dungeon-preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Install Godot 4
+        uses: chickensoft-games/setup-godot@v2
+        with:
+          version: 4.5.1
+          use-dotnet: false
+          include-templates: false
+
+      - name: Confirm engine version
+        run: godot --version
+
+      - name: Import project and check scripts
+        run: godot --headless --path . --editor --import --quit
+
+      - name: Validate 50 seeded dungeon layouts
+        run: godot --headless --path . --script res://tests/test_dungeon_preview.gd

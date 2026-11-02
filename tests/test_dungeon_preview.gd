@@ -6,7 +6,7 @@ func _initialize() -> void:
 
 func _run_tests() -> void:
     var scene := load("res://scenes/dungeon_preview.tscn")
-    var preview := scene.instantiate()
+    var preview: Variant = scene.instantiate()
     root.add_child(preview)
     var failures := 0
     var distinct_layouts: Dictionary = {}

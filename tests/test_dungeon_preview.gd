@@ -9,6 +9,7 @@ func _run_tests() -> void:
     var preview := scene.instantiate()
     root.add_child(preview)
     var failures := 0
+    var distinct_layouts: Dictionary = {}
     for seed in range(1, 51):
         preview._generate(seed)
         var rooms: Array = preview.cells
@@ -25,9 +26,16 @@ func _run_tests() -> void:
         var adjacency: Dictionary = {}
         for room in rooms:
             adjacency[room] = []
+        var edge_keys: Dictionary = {}
         for edge in edges:
             var a: Vector2i = edge["a"]
             var b: Vector2i = edge["b"]
+            var key := str(a) + ":" + str(b)
+            var reverse_key := str(b) + ":" + str(a)
+            if edge_keys.has(key) or edge_keys.has(reverse_key):
+                push_error("Seed %d: duplicate connection" % seed)
+                failures += 1
+            edge_keys[key] = true
             if not adjacency.has(a) or not adjacency.has(b) or absi(a.x - b.x) + absi(a.y - b.y) != 1:
                 push_error("Seed %d: invalid connection" % seed)
                 failures += 1
@@ -53,13 +61,28 @@ func _run_tests() -> void:
         if not branched:
             push_error("Seed %d: missing three-way branch" % seed)
             failures += 1
+        # Check that the preview actually built visible 3D rooms, not just a graph.
+        var labels := 0
+        var meshes := 0
+        for child in preview.geometry.get_children():
+            if child is Label3D:
+                labels += 1
+            elif child is MeshInstance3D:
+                meshes += 1
+        if labels != rooms.size() or meshes < rooms.size():
+            push_error("Seed %d: missing room labels or 3D geometry" % seed)
+            failures += 1
         var signature := str(preview.cells) + "|" + str(preview.links)
+        distinct_layouts[signature] = true
         preview._generate(seed)
         if signature != str(preview.cells) + "|" + str(preview.links):
             push_error("Seed %d: seed replay changed topology" % seed)
             failures += 1
+    if distinct_layouts.size() < 20:
+        push_error("Insufficient variety: only %d distinct layouts across 50 seeds" % distinct_layouts.size())
+        failures += 1
     if failures == 0:
-        print("PASS: 50 seeds, 7-10 rooms, no grid overlap, connected branches, deterministic replay")
+        print("PASS: 50 seeds, %d distinct layouts, 7-10 rooms, connected branches, visible geometry, deterministic replay" % distinct_layouts.size())
         quit(0)
     else:
         push_error("FAILED: %d checks" % failures)

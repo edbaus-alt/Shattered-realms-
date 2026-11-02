@@ -26,3 +26,13 @@ The test exercises 50 seeds and checks 7–10 unique module positions, adjacent/
 
 ## Next integration step (not included)
 Refactor the topology into a shared generator resource, add collision/navigation to generated geometry, and connect it to the player scene. Later, import compatible layouts from the separate AXIOM Level Builder and add cellular caves as specialized modules.
+
+## Automated validation (2026-11-02)
+
+GitHub Actions runs `.github/workflows/dungeon-preview-checks.yml` on the draft PR and the preview branch. It installs Godot 4.5.1, imports the project headlessly, and runs the 50-seed test.
+
+**Confirmed result:** 50/50 seeded layouts passed; 50 distinct topologies were observed. Checks include 7–10 unique grid modules, connected branches, no duplicate links, valid adjacent connections, room labels and generated mesh presence, and deterministic same-seed replay. CI run: https://github.com/edbaus-alt/Shattered-realms-/actions/runs/41454375944
+
+The CI checks exposed and helped fix GDScript type-inference parse errors in the preview and test scripts. The check is **not** a tablet visual/performance test, and the generated rooms are **not** yet integrated with the player scene.
+
+**Next manual test:** Open `scenes/dungeon_preview.tscn` in Godot 4.5.1, rotate/zoom, generate five seeds, and replay one seed. On the target tablet, verify touch orbit/pinch and readability. Keep this PR draft until those checks pass.

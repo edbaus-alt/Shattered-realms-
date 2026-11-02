@@ -78,6 +78,10 @@ func _run_tests() -> void:
         if signature != str(preview.cells) + "|" + str(preview.links):
             push_error("Seed %d: seed replay changed topology" % seed)
             failures += 1
+        # Allow queue_free() to release previous geometry before the next seed.
+        await process_frame
+        if seed % 10 == 0:
+            print("Validated %d / 50 seeds" % seed)
     if distinct_layouts.size() < 20:
         push_error("Insufficient variety: only %d distinct layouts across 50 seeds" % distinct_layouts.size())
         failures += 1

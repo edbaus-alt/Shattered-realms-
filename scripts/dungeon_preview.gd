@@ -136,7 +136,7 @@ func _generate(new_seed: int) -> void:
     # Optional loops between adjacent but previously unconnected modules.
     for cell in cells:
         for direction in [Vector2i.RIGHT, Vector2i.DOWN]:
-            var neighbor := cell + direction
+            var neighbor: Vector2i = cell + direction
             if cells.has(neighbor) and not _is_linked(cell, neighbor) and rng.randf() < 0.22:
                 links.append({"a": cell, "b": neighbor})
     _rebuild_geometry()
@@ -209,7 +209,7 @@ func _build_room(cell: Vector2i, kind: String, number: int) -> void:
             if linked:
                 var length := (ROOM_SIZE - DOOR_WIDTH) * 0.5
                 for signum in [-1.0, 1.0]:
-                    var z := signum * (DOOR_WIDTH * 0.5 + length * 0.5)
+                    var z: float = signum * (DOOR_WIDTH * 0.5 + length * 0.5)
                     _box(origin + Vector3(x, WALL_HEIGHT * 0.5, z), Vector3(0.3, WALL_HEIGHT, length), wall_color)
             else:
                 _box(origin + Vector3(x, WALL_HEIGHT * 0.5, 0), Vector3(0.3, WALL_HEIGHT, ROOM_SIZE), wall_color)
@@ -218,7 +218,7 @@ func _build_room(cell: Vector2i, kind: String, number: int) -> void:
             if linked:
                 var length := (ROOM_SIZE - DOOR_WIDTH) * 0.5
                 for signum in [-1.0, 1.0]:
-                    var x := signum * (DOOR_WIDTH * 0.5 + length * 0.5)
+                    var x: float = signum * (DOOR_WIDTH * 0.5 + length * 0.5)
                     _box(origin + Vector3(x, WALL_HEIGHT * 0.5, z), Vector3(length, WALL_HEIGHT, 0.3), wall_color)
             else:
                 _box(origin + Vector3(0, WALL_HEIGHT * 0.5, z), Vector3(ROOM_SIZE, WALL_HEIGHT, 0.3), wall_color)

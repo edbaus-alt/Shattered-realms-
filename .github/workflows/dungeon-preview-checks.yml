@@ -43,3 +43,6 @@ jobs:
 
       - name: Validate 100 doorway clearance layouts
         run: timeout 120s godot --headless --path . --script res://tests/test_doorway_clearance.gd
+
+      - name: Validate 100 seeded entrance-to-room routes
+        run: timeout 120s godot --headless --path . --script res://tests/test_room_routes.gd
